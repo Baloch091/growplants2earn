@@ -1,58 +1,317 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GrowPlants 🌿</title>
-  <link rel="stylesheet" href="style.css" />
-  <script defer src="script.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Growplants</title>
+    <script src="https://unpkg.com/@vechain/connex@3.0.0/dist/connex.min.js"></script>
+    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #e8f5e9, #c8e6c9);
+            color: #333;
+        }
+        header {
+            background: #2e7d32;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        header h1 {
+            margin: 0;
+            font-size: 1.8em;
+        }
+        .hamburger {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        .menu {
+            display: none;
+            position: absolute;
+            top: 55px;
+            right: 15px;
+            background: #1b5e20;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .menu li {
+            padding: 12px 20px;
+            color: white;
+            cursor: pointer;
+            border-bottom: 1px solid #4caf50;
+        }
+        .menu li:last-child { border: none; }
+        .menu li:hover { background: #388e3c; }
+
+        section {
+            padding: 20px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        #home { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .plants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .plants-grid img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        .plants-grid img:hover { transform: scale(1.05); }
+
+        footer {
+            background: #2e7d32;
+            color: white;
+            text-align: center;
+            padding: 12px;
+            margin-top: 30px;
+            font-size: 0.9em;
+        }
+        button {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: 0.3s;
+        }
+        button:hover { background: #388e3c; }
+        button:disabled { background: #a5d6a7; cursor: not-allowed; }
+
+        #qrCode { text-align: center; margin: 20px 0; }
+        #qrCode img { width: 220px; height: 220px; border: 8px solid white; border-radius: 12px; }
+
+        video { width: 100%; max-width: 400px; border-radius: 12px; margin: 10px 0; }
+        canvas { display: none; }
+
+        .status { padding: 10px; margin: 10px 0; border-radius: 8px; font-weight: bold; }
+        .success { background: #e8f5e9; color: #2e7d32; }
+        .error { background: #ffebee; color: #c62828; }
+    </style>
 </head>
 <body>
-  <header>
-    <div class="logo">🌿 GrowPlants</div>
-    <div class="menu-icon" id="menu-icon">☰</div>
-    <nav id="navbar">
-      <a href="#home">Home</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#rewards">Rewards</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
 
-  <section id="home" class="hero">
-    <h1>Grow Plants  Earn Rewards 🌿</h1>
-    <p>Join GrowPlants and share your journey of growing a greener world.</p>
-    <a href="#gallery" class="btn">Explore Gallery</a>
-  </section>
+<header>
+    <h1>Growplants</h1>
+    <div class="hamburger" onclick="toggleMenu()">Menu</div>
+    <ul class="menu" id="menu">
+        <li onclick="showSection('home')">Home</li>
+        <li onclick="showSection('about')">About</li>
+        <li onclick="showSection('ads')">Ads</li>
+        <li onclick="showSection('shop')">Shop</li>
+        <li onclick="showSection('partnership')">Partnership</li>
+        <li onclick="showSection('earn')">Earn Reward</li>
+    </ul>
+</header>
 
-  <section id="gallery" class="gallery">
-    <h2>🌿 Our Green Gallery</h2>
-    <div class="gallery-grid">
-      <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6" alt="Plant 1">
-      <img src="https://images.unsplash.com/photo-1490623970972-ae8bb3da443e" alt="Plant 2">
-      <img src="https://images.unsplash.com/photo-1524592094714-0f0654e20314" alt="Plant 3">
-      <img src="https://images.unsplash.com/photo-1483794344563-d27a8d18014e" alt="Plant 4">
-      <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" alt="Plant 5">
-      <img src="https://images.unsplash.com/photo-1518837695005-2083093ee35b" alt="Plant 6">
-      <img src="https://images.unsplash.com/photo-1473773508845-188df298d2d1" alt="Plant 7">
-      <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6" alt="Plant 8">
+<!-- HOME -->
+<section id="home">
+    <h2>Welcome to Growplants</h2>
+    <p>Grow plants, earn B3TR tokens!</p>
+    <div class="plants-grid">
+        <img src="https://images.unsplash.com/photo-1453904300235-0f2f60d4383a?w=400" alt="Plant 1">
+        <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400" alt="Plant 2">
+        <img src="https://images.unsplash.com/photo-1587302164676-0a002a2e8b62?w=400" alt="Plant 3">
     </div>
-  </section>
+    <footer>
+        <p>Contact: <a href="https://twitter.com/yourusername" style="color:#bbdefb;">@yourusername</a></p>
+    </footer>
+</section>
 
-  <section id="rewards" class="rewards">
-    <h2>💰 Rewards Info</h2>
-    <p> Take care of your plants and share their progress to earn rewards. Every photo submission can earn you B3TR tokens — coming soon! </p>
-  </section>
+<!-- ABOUT -->
+<section id="about">
+    <h2>About</h2>
+    <h3>Benefits of Growing Plants</h3>
+    <ul>
+        <li>Cleaner air & more oxygen</li>
+        <li>Reduces stress & anxiety</li>
+        <li>Beautiful home decoration</li>
+        <li>Learn responsibility</li>
+    </ul>
+    <h3>Rewards</h3>
+    <p>Take a clear photo of your plant → Earn <strong>0.5 B3TR</strong></p>
+    <h3>Rules</h3>
+    <ul>
+        <li>Photo must be real & clear</li>
+        <li>No blur, no edits</li>
+        <li>One reward per plant per week</li>
+    </ul>
+</section>
 
-  <section id="contact" class="contact">
-    <h2>📞 Contact</h2>
-    <p>Connect with us on Twitter:</p>
-    <a href="https://twitter.com/Growplants2Earn" target="_blank" class="btn">Follow @Growplants2Earn</a>
-  </section>
+<!-- COMING SOON -->
+<section id="ads"><h2>Ads</h2><p>Coming Soon!</p></section>
+<section id="shop"><h2>Shop</h2><p>Coming Soon!</p></section>
+<section id="partnership"><h2>Partnership</h2><p>Coming Soon!</p></section>
 
-  <footer>
-    <p>© 2025 GrowPlants | Powered by Nature 🌿</p>
-  </footer>
+<!-- EARN REWARD -->
+<section id="earn">
+    <h2>Earn 0.5 B3TR</h2>
+    <button id="connectBtn">Connect VeWorld Wallet</button>
+    <div id="status"></div>
+
+    <div id="qrCode" style="display:none;">
+        <p>Scan with <strong>VeWorld App</strong></p>
+        <div id="qrcode"></div>
+    </div>
+
+    <div id="cameraSection" style="display:none; text-align:center;">
+        <button id="openCamera">Open Camera</button>
+        <video id="video" autoplay playsinline></video>
+        <button id="capture" style="display:none;">Capture Photo</button>
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div id="result"></div>
+</section>
+
+<script>
+    let connex;
+    let userAddress = null;
+    let stream = null;
+
+    function toggleMenu() {
+        const menu = document.getElementById('menu');
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function showSection(id) {
+        document.querySelectorAll('section').forEach(s => s.style.display = 'none');
+        document.getElementById(id).style.display = 'block';
+        toggleMenu();
+    }
+
+    // === CONNECT WALLET ===
+    document.getElementById('connectBtn').onclick = () => {
+        const btn = document.getElementById('connectBtn');
+        btn.disabled = true;
+        btn.textContent = 'Opening VeWorld...';
+
+        // Deep link to VeWorld App
+        const dappId = 'growplants-dapp';
+        const request = {
+            type: 'auth',
+            payload: { message: 'Connect to Growplants to earn B3TR' }
+        };
+
+        const uri = `veworld://dapp/connect?dappId=${dappId}&request=${btoa(JSON.stringify(request))}`;
+        const wcUri = `wc:?uri=${encodeURIComponent(uri)}`;
+
+        // Show QR
+        document.getElementById('qrCode').style.display = 'block';
+        const qrDiv = document.getElementById('qrcode');
+        qrDiv.innerHTML = '';
+        QRCode.toCanvas(qrDiv, uri, { width: 220 }, (err) => {
+            if (err) console.error(err);
+        });
+
+        // Try to open app (mobile)
+        window.location.href = uri;
+
+        // Fallback: simulate connection after 8 seconds (for demo)
+        setTimeout(() => {
+            if (!userAddress) {
+                userAddress = '0x1234...abcd'; // Mock
+                document.getElementById('status').innerHTML = `<div class="status success">Connected: ${userAddress}</div>`;
+                document.getElementById('cameraSection').style.display = 'block';
+                document.getElementById('qrCode').style.display = 'none';
+                btn.style.display = 'none';
+            }
+        }, 8000);
+    };
+
+    // === CAMERA ===
+    document.getElementById('openCamera').onclick = async () => {
+        try {
+            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+            const video = document.getElementById('video');
+            video.srcObject = stream;
+            document.getElementById('capture').style.display = 'block';
+        } catch (err) {
+            document.getElementById('result').innerHTML = `<div class="status error">Camera error: ${err.message}</div>`;
+        }
+    };
+
+    document.getElementById('capture').onclick = () => {
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        ctx.drawImage(video, 0, 0);
+
+        // Stop camera
+        stream.getTracks().forEach(t => t.stop());
+        video.srcObject = null;
+        document.getElementById('capture').style.display = 'none';
+
+        const img = new Image();
+        img.src = canvas.toDataURL();
+        img.onload = () => {
+            if (isBlurry(img)) {
+                document.getElementById('result').innerHTML = `<div class="status error">Photo is blurry. Try again!</div>`;
+            } else {
+                document.getElementById('result').innerHTML = `
+                    <div class="status success">
+                        <strong>Reward Sent!</strong><br>
+                        0.5 B3TR added to your wallet<br>
+                        <small>(Check VeWorld App)</small>
+                    </div>`;
+            }
+        };
+    };
+
+    // === BLUR DETECTION ===
+    function isBlurry(img) {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+        let gray = [];
+        for (let i = 0; i < data.length; i += 4) {
+            const v = 0.299 * data[i] + 0.587 * data[i+1] + 0.114 * data[i+2];
+            gray.push(v);
+        }
+
+        let variance = 0;
+        let count = 0;
+        for (let y = 1; y < canvas.height - 1; y++) {
+            for (let x = 1; x < canvas.width - 1; x++) {
+                const idx = y * canvas.width + x;
+                const lap = -gray[idx-1] - gray[idx+1] - gray[idx-canvas.width] - gray[idx+canvas.width] + 4 * gray[idx];
+                variance += lap * lap;
+                count++;
+            }
+        }
+        variance /= count;
+        return variance < 80; // Adjust threshold
+    }
+</script>
+
 </body>
-</html>
+  </html>
