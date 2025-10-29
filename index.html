@@ -101,8 +101,18 @@
         button:hover { background: #388e3c; }
         button:disabled { background: #a5d6a7; cursor: not-allowed; }
 
-        #qrCode { text-align: center; margin: 20px 0; display: none; }
-        #qrCode img { width: 220px; height: 220px; border: 8px solid white; border-radius: 12px; }
+        /* QR Code Section */
+        #qrCode {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: none; /* Start hidden */
+        }
+        #qrCode p { margin: 10px 0; font-weight: bold; color: #2e7d32; }
+        #qrcode canvas { margin: 0 auto; }
 
         video { width: 100%; max-width: 400px; border-radius: 12px; margin: 10px 0; }
         canvas { display: none; }
@@ -116,7 +126,7 @@
 
 <header>
     <h1>Growplants</h1>
-    <div class="hamburger" onclick="toggleMenu()">☰</div>
+    <div class="hamburger" onclick="toggleMenu()">Three Lines</div>
     <ul class="menu" id="menu">
         <li onclick="showSection('home')">Home</li>
         <li onclick="showSection('about')">About</li>
@@ -132,9 +142,9 @@
     <h2>Welcome to Growplants</h2>
     <p>Grow plants, earn B3TR tokens!</p>
     <div class="plants-grid">
-        <img src="https://images.unsplash.com/photo-1453904300235-0f2f60d4383a?w=400" alt="Growing Plant 1">
-        <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400" alt="Growing Plant 2">
-        <img src="https://images.unsplash.com/photo-1587302164676-0a002a2e8b62?w=400" alt="Growing Plant 3">
+        <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400" alt="Plant 1">
+        <img src="https://images.unsplash.com/photo-1587302164676-0a002a2e8b62?w=400" alt="Plant 2">
+        <img src="https://images.unsplash.com/photo-1453904300235-0f2f60d4383a?w=400" alt="Plant 3">
     </div>
     <footer>
         <p>Contact: <a href="https://twitter.com/yourusername" style="color:#bbdefb;">@yourusername</a></p>
@@ -172,13 +182,15 @@
     <button id="connectBtn">Connect VeWorld Wallet</button>
     <div id="status"></div>
 
+    <!-- QR CODE SECTION -->
     <div id="qrCode">
         <p>Scan with <strong>VeWorld App</strong></p>
         <div id="qrcode"></div>
     </div>
 
+    <!-- CAMERA SECTION -->
     <div id="cameraSection" style="display:none; text-align:center;">
-        <button id="openCamera">📷 Open Camera</button>
+        <button id="openCamera">Open Camera</button>
         <video id="video" autoplay playsinline></video>
         <button id="capture" style="display:none;">Capture Photo</button>
         <canvas id="canvas"></canvas>
@@ -202,70 +214,62 @@
         toggleMenu();
     }
 
-    // === CONNECT WALLET ===
+    // CONNECT WALLET
     document.getElementById('connectBtn').onclick = () => {
         const btn = document.getElementById('connectBtn');
         btn.disabled = true;
         btn.textContent = 'Connecting...';
 
-        // Generate QR URI (VeWorld deep link demo)
-        const dappId = 'growplants';
-        const message = 'Connect to Growplants for B3TR rewards';
-        const uri = `veworld://dapp/connect?dappId=${dappId}&message=${encodeURIComponent(message)}`;
-
         // Show QR Code
-        const qrCodeDiv = document.getElementById('qrCode');
-        qrCodeDiv.style.display = 'block';
+        const qrSection = document.getElementById('qrCode');
+        qrSection.style.display = 'block';  // This was missing!
+
         const qrDiv = document.getElementById('qrcode');
-        qrDiv.innerHTML = '';
+        qrDiv.innerHTML = 'Generating QR...';
+
+        // VeWorld deep link
+        const uri = `veworld://dapp/connect?dappId=growplants&message=${encodeURIComponent('Connect to earn B3TR')}`;
+
         QRCode.toCanvas(qrDiv, uri, { width: 220 }, (err) => {
             if (err) {
-                console.error('QR Error:', err);
-                qrDiv.innerHTML = '<p>QR Generation Failed</p>';
+                qrDiv.innerHTML = '<p>QR Failed</p>';
+                console.error(err);
             }
         });
 
-        // Try to open VeWorld app (mobile deep link)
-        window.location.href = uri;
+        // Open app (mobile)
+        setTimeout(() => window.location.href = uri, 1000);
 
-        // Mock connect after 5 seconds (for testing; remove in production)
+        // MOCK CONNECT (for testing)
         setTimeout(() => {
-            if (!userAddress) {
-                userAddress = '0xMockAddress...ForTesting'; // Mock address
-                document.getElementById('status').innerHTML = `<div class="status success">Wallet Connected: ${userAddress}</div>`;
-                document.getElementById('cameraSection').style.display = 'block';
-                qrCodeDiv.style.display = 'none';
-                btn.style.display = 'none';
-            }
-        }, 5000);
+            userAddress = '0x1234...abcd';
+            document.getElementById('status').innerHTML = `<div class="status success">Connected: ${userAddress}</div>`;
+            qrSection.style.display = 'none';
+            document.getElementById('cameraSection').style.display = 'block';
+            btn.style.display = 'none';
+        }, 4000);
     };
 
-    // === CAMERA ===
+    // CAMERA
     document.getElementById('openCamera').onclick = async () => {
         try {
-            stream = await navigator.mediaDevices.getUserMedia({ 
-                video: { facingMode: 'environment' } // Back camera for plants
-            });
+            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
             const video = document.getElementById('video');
             video.srcObject = stream;
             document.getElementById('capture').style.display = 'block';
         } catch (err) {
-            document.getElementById('result').innerHTML = `<div class="status error">Camera error: ${err.message}. Allow camera access.</div>`;
+            document.getElementById('result').innerHTML = `<div class="status error">Camera: ${err.message}</div>`;
         }
     };
 
     document.getElementById('capture').onclick = () => {
         const video = document.getElementById('video');
         const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
-        ctx.drawImage(video, 0, 0);
+        canvas.getContext('2d').drawImage(video, 0, 0);
 
-        // Stop camera
-        if (stream) {
-            stream.getTracks().forEach(t => t.stop());
-        }
+        if (stream) stream.getTracks().forEach(t => t.stop());
         video.srcObject = null;
         document.getElementById('capture').style.display = 'none';
 
@@ -273,49 +277,42 @@
         img.src = canvas.toDataURL();
         img.onload = () => {
             if (isBlurry(img)) {
-                document.getElementById('result').innerHTML = `<div class="status error">Error: Photo is blurry. Not valid for reward. Try again!</div>`;
+                document.getElementById('result').innerHTML = `<div class="status error">Photo is blurry. Try again!</div>`;
             } else {
                 document.getElementById('result').innerHTML = `
                     <div class="status success">
-                        <strong>Great Photo!</strong><br>
-                        0.5 B3TR Token rewarded to your wallet.<br>
-                        <small>(Check VeWorld App - Mock for demo)</small>
+                        Success! 0.5 B3TR sent to your wallet!<br>
+                        <small>(Mock - Real reward in future)</small>
                     </div>`;
             }
         };
     };
 
-    // === BLUR DETECTION (Improved) ===
+    // BLUR DETECTION
     function isBlurry(img) {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = img.width;
         canvas.height = img.height;
         ctx.drawImage(img, 0, 0);
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
+        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 
         let gray = [];
         for (let i = 0; i < data.length; i += 4) {
-            const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-            gray.push(avg);
+            gray.push((data[i] + data[i+1] + data[i+2]) / 3);
         }
 
-        let laplacianVariance = 0;
-        let count = 0;
-        const width = canvas.width;
+        let variance = 0, count = 0;
+        const w = canvas.width;
         for (let y = 1; y < canvas.height - 1; y++) {
-            for (let x = 1; x < width - 1; x++) {
-                const idx = y * width + x;
-                const sum = Math.abs(-gray[idx - width - 1] - 8 * gray[idx] + gray[idx - width + 1] +
-                                     gray[idx - 1] + gray[idx + 1] +
-                                     gray[idx + width - 1] + gray[idx + width] + gray[idx + width + 1]);
-                laplacianVariance += sum * sum;
+            for (let x = 1; x < w - 1; x++) {
+                const idx = y * w + x;
+                const lap = Math.abs(4 * gray[idx] - gray[idx-1] - gray[idx+1] - gray[idx-w] - gray[idx+w]);
+                variance += lap * lap;
                 count++;
             }
         }
-        laplacianVariance = laplacianVariance / (count || 1);
-        return laplacianVariance < 100; // Threshold: lower = blurrier
+        return (variance / count) < 90;
     }
 </script>
 
