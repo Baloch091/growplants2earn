@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Growplants</title>
-    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -59,6 +58,7 @@
             padding: 20px;
             display: none;
             animation: fadeIn 0.5s;
+            text-align: center;
         }
         #home { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -87,39 +87,28 @@
             margin-top: 30px;
             font-size: 0.9em;
         }
+
         button {
             background: #4caf50;
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 1em;
-            border-radius: 8px;
+            padding: 14px 28px;
+            font-size: 1.1em;
+            border-radius: 12px;
             cursor: pointer;
-            margin: 10px 0;
+            margin: 20px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
             transition: 0.3s;
         }
-        button:hover { background: #388e3c; }
-        button:disabled { background: #a5d6a7; cursor: not-allowed; }
+        button:hover { background: #388e3c; transform: translateY(-2px); }
 
-        /* QR Code Section */
-        #qrCode {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            display: none; /* Start hidden */
+        .coming-soon {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2e7d32;
+            margin: 60px 0;
+            display: none; /* Hidden by default */
         }
-        #qrCode p { margin: 10px 0; font-weight: bold; color: #2e7d32; }
-        #qrcode canvas { margin: 0 auto; }
-
-        video { width: 100%; max-width: 400px; border-radius: 12px; margin: 10px 0; }
-        canvas { display: none; }
-
-        .status { padding: 10px; margin: 10px 0; border-radius: 8px; font-weight: bold; }
-        .success { background: #e8f5e9; color: #2e7d32; }
-        .error { background: #ffebee; color: #c62828; }
     </style>
 </head>
 <body>
@@ -155,7 +144,7 @@
 <section id="about">
     <h2>About</h2>
     <h3>Benefits of Growing Plants</h3>
-    <ul>
+    <ul style="text-align:left; max-width:600px; margin:0 auto;">
         <li>Cleaner air & more oxygen</li>
         <li>Reduces stress & anxiety</li>
         <li>Beautiful home decoration</li>
@@ -164,45 +153,30 @@
     <h3>Rewards</h3>
     <p>Take a clear photo of your plant → Earn <strong>0.5 B3TR</strong></p>
     <h3>Rules</h3>
-    <ul>
+    <ul style="text-align:left; max-width:600px; margin:0 auto;">
         <li>Photo must be real & clear</li>
         <li>No blur, no edits</li>
         <li>One reward per plant per week</li>
     </ul>
 </section>
 
-<!-- COMING SOON -->
-<section id="ads"><h2>Ads</h2><p>Coming Soon!</p></section>
-<section id="shop"><h2>Shop</h2><p>Coming Soon!</p></section>
-<section id="partnership"><h2>Partnership</h2><p>Coming Soon!</p></section>
+<!-- COMING SOON SECTIONS -->
+<section id="ads"><h2>Ads</h2><p class="coming-soon">Coming Soon!</p></section>
+<section id="shop"><h2>Shop</h2><p class="coming-soon">Coming Soon!</p></section>
+<section id="partnership"><h2>Partnership</h2><p class="coming-soon">Coming Soon!</p></section>
 
-<!-- EARN REWARD -->
+<!-- EARN REWARD SECTION -->
 <section id="earn">
     <h2>Earn 0.5 B3TR</h2>
+    
+    <!-- Wallet Connect Button -->
     <button id="connectBtn">Connect VeWorld Wallet</button>
-    <div id="status"></div>
-
-    <!-- QR CODE SECTION -->
-    <div id="qrCode">
-        <p>Scan with <strong>VeWorld App</strong></p>
-        <div id="qrcode"></div>
-    </div>
-
-    <!-- CAMERA SECTION -->
-    <div id="cameraSection" style="display:none; text-align:center;">
-        <button id="openCamera">Open Camera</button>
-        <video id="video" autoplay playsinline></video>
-        <button id="capture" style="display:none;">Capture Photo</button>
-        <canvas id="canvas"></canvas>
-    </div>
-
-    <div id="result"></div>
+    
+    <!-- Coming Soon Message (Hidden initially) -->
+    <p id="comingSoonMsg" class="coming-soon">Coming Soon!</p>
 </section>
 
 <script>
-    let userAddress = null;
-    let stream = null;
-
     function toggleMenu() {
         const menu = document.getElementById('menu');
         menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
@@ -214,107 +188,12 @@
         toggleMenu();
     }
 
-    // CONNECT WALLET
-    document.getElementById('connectBtn').onclick = () => {
-        const btn = document.getElementById('connectBtn');
-        btn.disabled = true;
-        btn.textContent = 'Connecting...';
-
-        // Show QR Code
-        const qrSection = document.getElementById('qrCode');
-        qrSection.style.display = 'block';  // This was missing!
-
-        const qrDiv = document.getElementById('qrcode');
-        qrDiv.innerHTML = 'Generating QR...';
-
-        // VeWorld deep link
-        const uri = `veworld://dapp/connect?dappId=growplants&message=${encodeURIComponent('Connect to earn B3TR')}`;
-
-        QRCode.toCanvas(qrDiv, uri, { width: 220 }, (err) => {
-            if (err) {
-                qrDiv.innerHTML = '<p>QR Failed</p>';
-                console.error(err);
-            }
-        });
-
-        // Open app (mobile)
-        setTimeout(() => window.location.href = uri, 1000);
-
-        // MOCK CONNECT (for testing)
-        setTimeout(() => {
-            userAddress = '0x1234...abcd';
-            document.getElementById('status').innerHTML = `<div class="status success">Connected: ${userAddress}</div>`;
-            qrSection.style.display = 'none';
-            document.getElementById('cameraSection').style.display = 'block';
-            btn.style.display = 'none';
-        }, 4000);
+    // Connect Button Click → Show "Coming Soon!"
+    document.getElementById('connectBtn').onclick = function() {
+        this.style.display = 'none'; // Hide button
+        document.getElementById('comingSoonMsg').style.display = 'block'; // Show message
     };
-
-    // CAMERA
-    document.getElementById('openCamera').onclick = async () => {
-        try {
-            stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-            const video = document.getElementById('video');
-            video.srcObject = stream;
-            document.getElementById('capture').style.display = 'block';
-        } catch (err) {
-            document.getElementById('result').innerHTML = `<div class="status error">Camera: ${err.message}</div>`;
-        }
-    };
-
-    document.getElementById('capture').onclick = () => {
-        const video = document.getElementById('video');
-        const canvas = document.getElementById('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        canvas.getContext('2d').drawImage(video, 0, 0);
-
-        if (stream) stream.getTracks().forEach(t => t.stop());
-        video.srcObject = null;
-        document.getElementById('capture').style.display = 'none';
-
-        const img = new Image();
-        img.src = canvas.toDataURL();
-        img.onload = () => {
-            if (isBlurry(img)) {
-                document.getElementById('result').innerHTML = `<div class="status error">Photo is blurry. Try again!</div>`;
-            } else {
-                document.getElementById('result').innerHTML = `
-                    <div class="status success">
-                        Success! 0.5 B3TR sent to your wallet!<br>
-                        <small>(Mock - Real reward in future)</small>
-                    </div>`;
-            }
-        };
-    };
-
-    // BLUR DETECTION
-    function isBlurry(img) {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = img.width;
-        canvas.height = img.height;
-        ctx.drawImage(img, 0, 0);
-        const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-
-        let gray = [];
-        for (let i = 0; i < data.length; i += 4) {
-            gray.push((data[i] + data[i+1] + data[i+2]) / 3);
-        }
-
-        let variance = 0, count = 0;
-        const w = canvas.width;
-        for (let y = 1; y < canvas.height - 1; y++) {
-            for (let x = 1; x < w - 1; x++) {
-                const idx = y * w + x;
-                const lap = Math.abs(4 * gray[idx] - gray[idx-1] - gray[idx+1] - gray[idx-w] - gray[idx+w]);
-                variance += lap * lap;
-                count++;
-            }
-        }
-        return (variance / count) < 90;
-    }
 </script>
 
 </body>
-</html>
+            </html>
