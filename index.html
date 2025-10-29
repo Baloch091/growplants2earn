@@ -6,196 +6,274 @@
     <title>Growplants</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: linear-gradient(to bottom, #e8f5e9, #c8e6c9);
+            background-color: #f4f4f4;
             color: #333;
         }
         header {
-            background: #2e7d32;
+            background-color: #4CAF50;
             color: white;
             padding: 15px;
             text-align: center;
             position: relative;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         header h1 {
             margin: 0;
-            font-size: 1.8em;
         }
         .hamburger {
             position: absolute;
             top: 15px;
             right: 15px;
-            font-size: 28px;
             cursor: pointer;
-            color: white;
+            font-size: 24px;
         }
         .menu {
             display: none;
             position: absolute;
-            top: 55px;
+            top: 50px;
             right: 15px;
-            background: #1b5e20;
+            background-color: #333;
+            color: white;
             list-style: none;
-            padding: 0;
+            padding: 10px;
             margin: 0;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            z-index: 1000;
+            border-radius: 5px;
         }
         .menu li {
-            padding: 12px 20px;
-            color: white;
+            padding: 10px;
             cursor: pointer;
-            border-bottom: 1px solid #4caf50;
         }
-        .menu li:last-child { border: none; }
-        .menu li:hover { background: #388e3c; }
-
+        .menu li:hover {
+            background-color: #555;
+        }
         section {
             padding: 20px;
             display: none;
-            animation: fadeIn 0.5s;
-            text-align: center;
         }
-        #home { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
+        #home {
+            display: block;
+        }
         .plants-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin: 20px 0;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
         }
         .plants-grid img {
             width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transition: transform 0.3s;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-        .plants-grid img:hover { transform: scale(1.05); }
-
         footer {
-            background: #2e7d32;
+            background-color: #4CAF50;
             color: white;
             text-align: center;
-            padding: 12px;
-            margin-top: 30px;
-            font-size: 0.9em;
+            padding: 10px;
+            margin-top: 20px;
         }
-
-        button {
-            background: #4caf50;
+        a {
             color: white;
-            border: none;
-            padding: 14px 28px;
-            font-size: 1.1em;
-            border-radius: 12px;
-            cursor: pointer;
-            margin: 20px 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: 0.3s;
+            text-decoration: none;
         }
-        button:hover { background: #388e3c; transform: translateY(-2px); }
-
-        .coming-soon {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2e7d32;
-            margin: 60px 0;
-            display: none;
+        a:hover {
+            text-decoration: underline;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        video {
+            display: block;
+            margin: 10px auto;
         }
     </style>
 </head>
 <body>
+    <header>
+        <h1>Growplants</h1>
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <ul class="menu" id="menu">
+            <li onclick="showSection('home')">Home</li>
+            <li onclick="showSection('about')">About</li>
+            <li onclick="showSection('ads')">Ads</li>
+            <li onclick="showSection('shop')">Shop</li>
+            <li onclick="showSection('partnership')">Partnership</li>
+            <li onclick="showSection('earn')">Earn Reward</li>
+        </ul>
+    </header>
 
-<header>
-    <h1>Growplants</h1>
-    <!-- Three Lines ICON -->
-    <div class="hamburger" onclick="toggleMenu()">Three Lines</div>
-    <ul class="menu" id="menu">
-        <li onclick="showSection('home')">Home</li>
-        <li onclick="showSection('about')">About</li>
-        <li onclick="showSection('ads')">Ads</li>
-        <li onclick="showSection('shop')">Shop</li>
-        <li onclick="showSection('partnership')">Partnership</li>
-        <li onclick="showSection('earn')">Earn Reward</li>
-    </ul>
-</header>
+    <section id="home">
+        <h2>Welcome to Growplants</h2>
+        <div class="plants-grid">
+            <img src="https://media.istockphoto.com/id/956366756/photo/tree-growth-three-steps-in-nature-and-beautiful-morning-lighting.jpg?s=612x612&w=0&k=20&c=0RR1skhLmMxHxbVMClJAi3XOtQ1fnfjUNusssi_3La4=" alt="Growing Plants 1">
+            <img src="https://i2-prod.dailyrecord.co.uk/incoming/article29994231.ece/ALTERNATES/s1227b/0_JS215432967.jpg" alt="Growing Plants 2">
+            <img src="https://www.easytogrowbulbs.com/cdn/shop/articles/plumeria-for-sale.jpg?v=1557257275&width=1100" alt="Growing Plants 3">
+        </div>
+        <footer>
+            <h3>Contact Us</h3>
+            <p>Follow us on Twitter: <a href="https://twitter.com/yourusername" target="_blank">@yourusername</a> (Replace with your actual Twitter handle)</p>
+        </footer>
+    </section>
 
-<!-- HOME - REAL PLANT PHOTOS -->
-<section id="home">
-    <h2>Welcome to Growplants</h2>
-    <p>Grow plants, earn B3TR tokens!</p>
-    <div class="plants-grid">
-        <!-- 100% Real Growing Plants -->
-        <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400" alt="Growing Plant 1">
-        <img src="https://images.unsplash.com/photo-1587302164676-0a002a2e8b62?w=400" alt="Growing Plant 2">
-        <img src="https://images.unsplash.com/photo-1600414833397-2c21d0a40235?w=400" alt="Growing Plant 3">
-    </div>
-    <footer>
-        <p>Contact: <a href="https://twitter.com/yourusername" style="color:#bbdefb;">@yourusername</a></p>
-    </footer>
-</section>
+    <section id="about">
+        <h2>About Growplants</h2>
+        <h3>Benefits of Growing Plants</h3>
+        <ul>
+            <li>Improves air quality by absorbing CO2 and releasing oxygen.</li>
+            <li>Reduces stress and promotes mental health.</li>
+            <li>Enhances home aesthetics and provides fresh produce.</li>
+            <li>Supports biodiversity and eco-friendly living.</li>
+            <li>Teaches patience and responsibility.</li>
+        </ul>
+        <h3>Rewards</h3>
+        <p>Upload clear photos of your growing plants and earn B3TR Tokens as rewards!</p>
+        <h3>Rules</h3>
+        <ul>
+            <li>Photos must be clear, real, and not blurred.</li>
+            <li>No edited or fake images allowed.</li>
+            <li>Photos should show actual plant growth stages.</li>
+            <li>One submission per plant per week.</li>
+            <li>Rewards distributed based on community verification.</li>
+        </ul>
+    </section>
 
-<!-- ABOUT -->
-<section id="about">
-    <h2>About</h2>
-    <h3>Benefits of Growing Plants</h3>
-    <ul style="text-align:left; max-width:600px; margin:0 auto;">
-        <li>Cleaner air & more oxygen</li>
-        <li>Reduces stress & anxiety</li>
-        <li>Beautiful home decoration</li>
-        <li>Learn responsibility</li>
-    </ul>
-    <h3>Rewards</h3>
-    <p>Take a clear photo of your plant → Earn <strong>0.5 B3TR</strong></p>
-    <h3>Rules</h3>
-    <ul style="text-align:left; max-width:600px; margin:0 auto;">
-        <li>Photo must be real & clear</li>
-        <li>No blur, no edits</li>
-        <li>One reward per plant per week</li>
-    </ul>
-</section>
+    <section id="ads">
+        <h2>Ads</h2>
+        <p>Coming Soon!</p>
+    </section>
 
-<!-- COMING SOON SECTIONS -->
-<section id="ads"><h2>Ads</h2><p class="coming-soon">Coming Soon!</p></section>
-<section id="shop"><h2>Shop</h2><p class="coming-soon">Coming Soon!</p></section>
-<section id="partnership"><h2>Partnership</h2><p class="coming-soon">Coming Soon!</p></section>
+    <section id="shop">
+        <h2>Shop</h2>
+        <p>Coming Soon!</p>
+    </section>
 
-<!-- EARN REWARD -->
-<section id="earn">
-    <h2>Earn 0.5 B3TR</h2>
-    
-    <!-- Connect Button -->
-    <button id="connectBtn">Connect VeWorld Wallet</button>
-    
-    <!-- Coming Soon (Hidden at first) -->
-    <p id="comingSoonMsg" class="coming-soon">Coming Soon!</p>
-</section>
+    <section id="partnership">
+        <h2>Partnership</h2>
+        <p>Coming Soon!</p>
+    </section>
 
-<script>
-    function toggleMenu() {
-        const menu = document.getElementById('menu');
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-    }
+    <section id="earn">
+        <h2>Earn Reward</h2>
+        <button id="connectWallet">Connect VeWorld Wallet</button>
+        <div id="walletStatus"></div>
+        <div id="cameraSection" style="display:none;">
+            <button id="openCamera">Open Camera (Camera Icon)</button>
+            <video id="video" width="320" height="240" autoplay></video>
+            <button id="capture" style="display:none;">Capture Photo</button>
+            <canvas id="canvas" style="display:none;"></canvas>
+        </div>
+        <div id="result"></div>
+    </section>
 
-    function showSection(id) {
-        document.querySelectorAll('section').forEach(s => s.style.display = 'none');
-        document.getElementById(id).style.display = 'block';
-        toggleMenu();
-    }
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        }
 
-    // Button Click → Show Coming Soon
-    document.getElementById('connectBtn').onclick = function() {
-        this.style.display = 'none';
-        document.getElementById('comingSoonMsg').style.display = 'block';
-    };
-</script>
+        function showSection(sectionId) {
+            var sections = document.querySelectorAll('section');
+            sections.forEach(function(sec) {
+                sec.style.display = 'none';
+            });
+            document.getElementById(sectionId).style.display = 'block';
+            toggleMenu();
+        }
 
+        // Wallet Connection (Requires VeWorld extension installed)
+        document.getElementById('connectWallet').onclick = async function() {
+            if (window.vechain) {
+                try {
+                    // Simple Connex init (assuming VeWorld injects it)
+                    const connex = window.vechain.newConnex({ node: 'https://testnet.vechain.org/' }); // Use mainnet for production: 'https://mainnet.vechain.org/'
+                    const certMessage = {
+                        purpose: 'identification',
+                        payload: {
+                            type: 'text',
+                            content: 'Connect to Growplants for rewards'
+                        }
+                    };
+                    const certResponse = await connex.vendor.sign('cert', certMessage).request();
+                    const address = certResponse.annex.address;
+                    document.getElementById('walletStatus').innerText = `Connected: ${address}`;
+                    document.getElementById('cameraSection').style.display = 'block';
+                } catch (error) {
+                    document.getElementById('walletStatus').innerText = 'Connection failed: ' + error.message;
+                }
+            } else {
+                document.getElementById('walletStatus').innerText = 'VeWorld wallet not installed. Install from Chrome Web Store.';
+            }
+        };
+
+        // Camera
+        document.getElementById('openCamera').onclick = async function() {
+            try {
+                const video = document.getElementById('video');
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                document.getElementById('capture').style.display = 'block';
+            } catch (error) {
+                document.getElementById('result').innerText = 'Camera access denied: ' + error.message;
+            }
+        };
+
+        // Capture and check photo
+        document.getElementById('capture').onclick = function() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            const img = new Image();
+            img.src = canvas.toDataURL('image/png');
+            img.onload = function() {
+                if (isBlurry(img)) {
+                    document.getElementById('result').innerText = 'Photo not valid for reward. Try again.';
+                } else {
+                    document.getElementById('result').innerText = 'Reward: 0.5 B3TR Token sent to your wallet! (Mock - for real, integrate smart contract)';
+                }
+            };
+        };
+
+        // Blur detection function
+        function isBlurry(image) {
+            const canvas = document.createElement('canvas');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(image, 0, 0);
+            const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+            const gray = [];
+            for (let i = 0; i < data.length; i += 4) {
+                const brightness = 0.34 * data[i] + 0.5 * data[i + 1] + 0.16 * data[i + 2];
+                gray.push(brightness);
+            }
+            const laplacian = [];
+            const width = canvas.width;
+            const height = canvas.height;
+            for (let y = 1; y < height - 1; y++) {
+                for (let x = 1; x < width - 1; x++) {
+                    const idx = y * width + x;
+                    const sum = -gray[idx - width - 1] - gray[idx - width] - gray[idx - width + 1]
+                        - gray[idx - 1] + 8 * gray[idx] - gray[idx + 1]
+                        - gray[idx + width - 1] - gray[idx + width] - gray[idx + width + 1];
+                    laplacian.push(sum * sum);
+                }
+            }
+            const mean = laplacian.reduce((a, b) => a + b, 0) / laplacian.length;
+            const variance = laplacian.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / laplacian.length;
+            return variance < 100; // Adjust threshold as needed (lower variance = blurrier)
+        }
+    </script>
 </body>
     </html>
