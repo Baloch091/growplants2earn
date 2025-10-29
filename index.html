@@ -107,7 +107,7 @@
             font-weight: bold;
             color: #2e7d32;
             margin: 60px 0;
-            display: none; /* Hidden by default */
+            display: none;
         }
     </style>
 </head>
@@ -115,6 +115,7 @@
 
 <header>
     <h1>Growplants</h1>
+    <!-- Three Lines ICON -->
     <div class="hamburger" onclick="toggleMenu()">Three Lines</div>
     <ul class="menu" id="menu">
         <li onclick="showSection('home')">Home</li>
@@ -126,14 +127,15 @@
     </ul>
 </header>
 
-<!-- HOME -->
+<!-- HOME - REAL PLANT PHOTOS -->
 <section id="home">
     <h2>Welcome to Growplants</h2>
     <p>Grow plants, earn B3TR tokens!</p>
     <div class="plants-grid">
-        <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400" alt="Plant 1">
-        <img src="https://images.unsplash.com/photo-1587302164676-0a002a2e8b62?w=400" alt="Plant 2">
-        <img src="https://images.unsplash.com/photo-1453904300235-0f2f60d4383a?w=400" alt="Plant 3">
+        <!-- 100% Real Growing Plants -->
+        <img src="https://images.unsplash.com/photo-1600414833397-2c21d0a40235?w=400" alt="Growing Plant 1">
+        <img src="https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=400" alt="Growing Plant 2">
+        <img src="https://images.unsplash.com/photo-1587302164676-0a002a2e8b62?w=400" alt="Growing Plant 3">
     </div>
     <footer>
         <p>Contact: <a href="https://twitter.com/yourusername" style="color:#bbdefb;">@yourusername</a></p>
@@ -165,14 +167,14 @@
 <section id="shop"><h2>Shop</h2><p class="coming-soon">Coming Soon!</p></section>
 <section id="partnership"><h2>Partnership</h2><p class="coming-soon">Coming Soon!</p></section>
 
-<!-- EARN REWARD SECTION -->
+<!-- EARN REWARD -->
 <section id="earn">
     <h2>Earn 0.5 B3TR</h2>
     
-    <!-- Wallet Connect Button -->
+    <!-- Connect Button -->
     <button id="connectBtn">Connect VeWorld Wallet</button>
     
-    <!-- Coming Soon Message (Hidden initially) -->
+    <!-- Coming Soon (Hidden at first) -->
     <p id="comingSoonMsg" class="coming-soon">Coming Soon!</p>
 </section>
 
@@ -188,12 +190,12 @@
         toggleMenu();
     }
 
-    // Connect Button Click → Show "Coming Soon!"
+    // Button Click → Show Coming Soon
     document.getElementById('connectBtn').onclick = function() {
-        this.style.display = 'none'; // Hide button
-        document.getElementById('comingSoonMsg').style.display = 'block'; // Show message
+        this.style.display = 'none';
+        document.getElementById('comingSoonMsg').style.display = 'block';
     };
 </script>
 
 </body>
-            </html>
+</html>
